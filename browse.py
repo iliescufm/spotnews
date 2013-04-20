@@ -1,6 +1,6 @@
 # coding: utf-8
 
-#	SpotNews | modul interpretare text in legatura cu titlul.
+#	SpotNews | Browse - modul interpretare text in legatura cu titlul.
 #	v0.0.1
 #
 #	Florin-Mihai Iliescu, e-mail: office@infologica.ro, mobil: (004) 0723233317
@@ -62,5 +62,3 @@ def browse_url(title,site_url):
             title_words = title_words + remove_nonsense(text.split())
             if debug:
                 print "DEBUG: %s" % title_words
-
-browse_url('Ţările cu cea mai ridicată pondere a creditelor neperformante în decembrie 2012. Pe ce loc e România','http://www.zf.ro/banci-si-asigurari/tarile-cu-cea-mai-ridicata-pondere-a-creditelor-neperformante-in-decembrie-2012-pe-ce-loc-e-romania-10769132')
