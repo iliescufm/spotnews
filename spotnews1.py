@@ -1,8 +1,11 @@
+# coding: utf-8
 import feedparser, re
+
+from browse import browse_url
 
 site_titles = ['CNN.com - Technology', 'Ziarul Financiar']
 #site_urls = ['http://rss.cnn.com/rss/cnn_tech.rss', 'http://www.zf.ro/rss.xml']
-site_urls = ['http://www.zf.ro/rss.xml']
+site_urls = ['http://rss.cnn.com/rss/cnn_tech.rss']
 
 def print_feed_data(feed):
    print feed[ "url" ] 	#  URL of the feed's RSS feed
@@ -20,9 +23,11 @@ def print_feed_data(feed):
       description = re.sub('<[^<]+?>', '', l[ "description" ])
       print description.strip()
       print l[ "link" ]
+      browse_url(l[ "title" ],l[ "link" ])
+      print "_________________________________________________"
       idx = idx + 1
    print "-------------------------------------------------"
-
+   
 def display_rss_info(url):
    feed = feedparser.parse(url)
    if feed[ "bozo" ] == 1:
@@ -38,6 +43,6 @@ def rss_test(url):
         print feed.entries
   
 for url in site_urls:
- rss_test(url)
+ #rss_test(url)
  display_rss_info(url)
 
