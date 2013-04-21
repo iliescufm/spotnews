@@ -1,41 +1,46 @@
 # -*- coding: iso-8859-15 -*-
+
+#	SpotNews | aplicatie principala.
+#	v0.1.0
+#
+#	Florin-Mihai Iliescu, e-mail: office@infologica.ro, mobil: (004) 0723233317
+#	Raspberry HACK, 20-21 aprilie 2012, Crystal Palace Ballroms - Bucuresti
+
 import feedparser, re
 
 import codecs
 
 from browse import browse_url
 from loadsites import loadsites_data
+from generatehtml import *
 
-site_titles = ['CNN.com - Technology', 'Ziarul Financiar']
-#site_urls = ['http://rss.cnn.com/rss/cnn_tech.rss', 'http://www.zf.ro/rss.xml']
 (site_urls, site_filters) = loadsites_data()
 
-def print_feed_data(feed,filters):
-   print feed[ "url" ] 	#  URL of the feed's RSS feed
-   print feed[ "version" ] #  version of the RSS feed
-   print feed[ "channel" ][ "title" ] # "PythonInfo Wiki" - Title of the Feed.
-   print feed[ "channel" ][ "description" ] # "RecentChanges at PythonInfo Wiki." - Description of the Feed
-   print feed[ "channel" ][ "link" ] # Link to RecentChanges - Web page associated with the feed.
-   #print feed[ "channel" ][ "wiki_interwiki" ] # "Python``Info" - For wiki, the wiki's preferred InterWiki moniker.
-   print "-------------------------------------------------"
-   #print feed[ "items" ] # A gigantic list of all of the RecentChanges items.
+def print_feed_data_to_html(feed,filters):
    idx = 1
    keys = filters.split('+')
-   print keys
+   print_h1(feed[ "channel" ][ "title" ]+" ["+filters.replace('+',', ') + "]")
    for l in feed[ "items" ]:
       item_title = l[ "title" ]
       item_descr = re.sub('<[^<]+?>', '', l[ "description" ]).strip()
       printed = False
       for k in keys:
           if not printed and ((k in item_title) or (k in item_descr)):
-             print "ITEM [%s]: %s - %s" % (idx, item_title.encode('ascii', 'ignore'), l[ "published" ]) 
-             print item_descr.encode('ascii', 'ignore')
-             print l[ "link" ]
-             #browse_url(l[ "title" ],l[ "link" ])
-             #print "_________________________________________________"
+             h2 = "[%s]: %s - %s" % (idx, item_title.encode('ascii', 'replace'), l[ "published" ])
+             print_h2(h2)
+             p = item_descr.encode('ascii', 'ignore')
+             print_p(p)
+             print_url(l[ "link" ],"citeste mai mult...")
              idx = idx + 1
              printed = True
-   print "-------------------------------------------------"
+
+def print_rss_to_html(url):
+   feed = feedparser.parse(url)
+   if feed[ "bozo" ] == 1:
+       print "Scuze, stirile de la [%s] nu sunt disponibile" % url
+   else: 
+       print_feed_data_to_html(feed,site_filters[site_urls.index(url)])
+
    
 def display_rss_info(url):
    feed = feedparser.parse(url)
@@ -44,16 +49,11 @@ def display_rss_info(url):
    else: 
        print_feed_data(feed,site_filters[site_urls.index(url)])
 
-def rss_test(url):
-    feed = feedparser.parse(url)
-    if feed[ "bozo" ] == 1:
-        print "Scuze, stirile de la [%s] nu sunt disponibile" % url
-    else: 
-        print feed.entries
-
 print site_urls
+
+start_html()
   
 for url in site_urls:
- #rss_test(url)
- display_rss_info(url)
+ print_rss_to_html(url)
 
+end_html()
