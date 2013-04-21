@@ -6,7 +6,7 @@
 #	Florin-Mihai Iliescu, e-mail: office@infologica.ro, mobil: (004) 0723233317
 #	Raspberry HACK, 20-21 aprilie 2012, Crystal Palace Ballroms - Bucuresti
 
-import feedparser, re
+import feedparser, re, time
 
 import codecs
 
@@ -51,9 +51,10 @@ def display_rss_info(url):
 
 print site_urls
 
-start_html()
-  
-for url in site_urls:
- print_rss_to_html(url)
-
-end_html()
+while 1:
+    start_html()
+    for url in site_urls:
+       print_rss_to_html(url)
+    end_html()
+    time.sleep(60)
+    print currenttime_string() + ": updating..."
